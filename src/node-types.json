@@ -440,6 +440,10 @@
           "named": true
         },
         {
+          "type": "enum_declaration",
+          "named": true
+        },
+        {
           "type": "interface_declaration",
           "named": true
         }
@@ -595,6 +599,20 @@
     "type": "array_creation_expression",
     "named": true,
     "fields": {
+      "annotation": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "annotation",
+            "named": true
+          },
+          {
+            "type": "marker_annotation",
+            "named": true
+          }
+        ]
+      },
       "dimensions": {
         "multiple": true,
         "required": true,
@@ -2572,6 +2590,20 @@
     "type": "object_creation_expression",
     "named": true,
     "fields": {
+      "annotation": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "annotation",
+            "named": true
+          },
+          {
+            "type": "marker_annotation",
+            "named": true
+          }
+        ]
+      },
       "arguments": {
         "multiple": false,
         "required": true,
