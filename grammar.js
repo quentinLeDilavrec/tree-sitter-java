@@ -307,6 +307,7 @@ module.exports = grammar({
 
     _unqualified_object_creation_expression: $ => prec.right(seq(
       'new',
+      optional($._annotation),
       field('type_arguments', optional($.type_arguments)),
       field('type', $._simple_type),
       field('arguments', $.argument_list),
