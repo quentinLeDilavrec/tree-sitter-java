@@ -2325,22 +2325,6 @@
           },
           {
             "type": "FIELD",
-            "name": "annotation",
-            "content": {
-              "type": "CHOICE",
-              "members": [
-                {
-                  "type": "SYMBOL",
-                  "name": "_annotation"
-                },
-                {
-                  "type": "BLANK"
-                }
-              ]
-            }
-          },
-          {
-            "type": "FIELD",
             "name": "type",
             "content": {
               "type": "SYMBOL",
@@ -2501,22 +2485,6 @@
           {
             "type": "STRING",
             "value": "new"
-          },
-          {
-            "type": "FIELD",
-            "name": "annotation",
-            "content": {
-              "type": "CHOICE",
-              "members": [
-                {
-                  "type": "SYMBOL",
-                  "name": "_annotation"
-                },
-                {
-                  "type": "BLANK"
-                }
-              ]
-            }
           },
           {
             "type": "FIELD",
@@ -4821,16 +4789,8 @@
                   "value": ";"
                 },
                 {
-                  "type": "CHOICE",
-                  "members": [
-                    {
-                      "type": "SYMBOL",
-                      "name": "enum_body_declarations"
-                    },
-                    {
-                      "type": "BLANK"
-                    }
-                  ]
+                  "type": "SYMBOL",
+                  "name": "enum_body_declarations"
                 }
               ]
             },
@@ -5690,6 +5650,10 @@
               {
                 "type": "SYMBOL",
                 "name": "annotation_type_declaration"
+              },
+              {
+                "type": "STRING",
+                "value": ";"
               }
             ]
           }

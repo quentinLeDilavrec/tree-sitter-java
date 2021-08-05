@@ -688,14 +688,18 @@ module.exports = grammar({
       '{',
       commaSep($.enum_constant),
       optional(','),
-      optional($.enum_body_declarations),
+      optional(
+        seq(
+          ';',
+          $.enum_body_declarations
+        )
+      ),
       '}'
     ),
 
-    enum_body_declarations: $ => seq(
-      ';',
-      repeat($._class_body_declaration)
-    ),
+    enum_body_declarations: $ => 
+      repeat1($._class_body_declaration)
+    ,
 
     enum_constant: $ => (seq(
       optional($.modifiers),
@@ -859,7 +863,9 @@ module.exports = grammar({
         $.constant_declaration,
         $.class_declaration,
         $.interface_declaration,
-        $.annotation_type_declaration
+        $.enum_declaration,
+        $.annotation_type_declaration,
+        ';'
       )),
       '}'
     ),
