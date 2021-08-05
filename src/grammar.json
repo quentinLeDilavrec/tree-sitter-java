@@ -4789,8 +4789,16 @@
                   "value": ";"
                 },
                 {
-                  "type": "SYMBOL",
-                  "name": "enum_body_declarations"
+                  "type": "CHOICE",
+                  "members": [
+                    {
+                      "type": "SYMBOL",
+                      "name": "enum_body_declarations"
+                    },
+                    {
+                      "type": "BLANK"
+                    }
+                  ]
                 }
               ]
             },

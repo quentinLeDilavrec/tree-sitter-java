@@ -691,7 +691,7 @@ module.exports = grammar({
       optional(
         seq(
           ';',
-          $.enum_body_declarations
+          optional($.enum_body_declarations)
         )
       ),
       '}'
