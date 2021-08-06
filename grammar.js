@@ -281,6 +281,7 @@ module.exports = grammar({
 
     array_creation_expression: $ => prec.right(seq(
       'new',
+      optional($._annotation),
       field('type', $._simple_type),
       choice(
         seq(
