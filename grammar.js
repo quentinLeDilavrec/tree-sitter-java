@@ -32,11 +32,14 @@ module.exports = grammar({
 
   extras: $ => [
     $.comment,
-    /\s/
+    // /\s/,
+    // /\u{000C}/
+    /[\s\u{00A0}\u{2007}\u{202F}\t\n\u{000B}\f\r\u{001C}\u{001D}\u{001E}\u{001F}]/
   ],
 
   supertypes: $ => [
     $.expression,
+    $._unary_exp,
     $.declaration,
     $.statement,
     $.primary_expression,
@@ -47,11 +50,13 @@ module.exports = grammar({
   ],
 
   inline: $ => [
+    $._unary_exp,
     $._name,
     $._simple_type,
     $._reserved_identifier,
     $._class_body_declaration,
-    $._variable_initializer
+    $._variable_initializer,
+    $._interface_type_list
   ],
 
   conflicts: $ => [
@@ -65,6 +70,8 @@ module.exports = grammar({
     [$.generic_type, $.primary_expression],
     // Only conflicts in switch expressions
     [$.lambda_expression, $.primary_expression],
+
+    [$.switch_expression, $.switch_statement],
   ],
 
   word: $ => $.identifier,
@@ -157,16 +164,12 @@ module.exports = grammar({
     // Expressions
 
     expression: $ => choice(
-      $.assignment_expression,
+      $.lambda_expression,
+      $._unary_exp,
       $.binary_expression,
       $.instanceof_expression,
-      $.lambda_expression,
       $.ternary_expression,
-      $.update_expression,
-      $.primary_expression,
-      $.unary_expression,
-      $.cast_expression,
-      prec(PREC.SWITCH_EXP, $.switch_expression), 
+      $.assignment_expression,
     ),
 
     cast_expression: $ => prec(PREC.CAST, seq(
@@ -224,7 +227,8 @@ module.exports = grammar({
 
     lambda_expression: $ => seq(
       field('parameters', choice(
-        $.identifier, $.formal_parameters, $.inferred_parameters
+        $.identifier, $.formal_parameters, $.inferred_parameters,
+        $._reserved_identifier,
       )),
       '->',
       field('body', choice($.expression, $.block))
@@ -244,6 +248,14 @@ module.exports = grammar({
       field('alternative', $.expression)
     )),
 
+    _unary_exp: $ => choice(
+      $.unary_expression,
+      $.update_expression,
+      $.primary_expression,
+      $.cast_expression,
+      $.switch_expression, 
+    ),
+
     unary_expression: $ => choice(...[
       ['+', PREC.UNARY],
       ['-', PREC.UNARY],
@@ -258,10 +270,10 @@ module.exports = grammar({
 
     update_expression: $ => prec.left(PREC.UNARY, choice(
       // Post (in|de)crement is evaluated before pre (in|de)crement
-      seq($.expression, '++'),
-      seq($.expression, '--'),
-      seq('++', $.expression),
-      seq('--', $.expression)
+      seq($._unary_exp, '++'),
+      seq($._unary_exp, '--'),
+      seq('++', $._unary_exp),
+      seq('--', $._unary_exp)
     )),
 
     primary_expression: $ => choice(
@@ -367,19 +379,30 @@ module.exports = grammar({
     wildcard: $ => seq(
       repeat($._annotation),
       '?',
-      optional($._wildcard_bounds)
+      // optional($._wildcard_bounds)
+      optional(choice(
+        $.wildcard_extends,
+        $.wildcard_super,))
     ),
-
-    _wildcard_bounds: $ => choice(
-      seq('extends', $._type),
-      seq($.super, $._type)
-    ),
+    
+    wildcard_extends: $ => seq('extends', $._type),
+    wildcard_super: $ => seq($.super, $._type),
+    // _wildcard_bounds: $ => choice(
+    //   seq('extends',field('extends', $._type)),
+    //   seq($.super, field('super', $._type)),
+    // ),
 
     dimensions: $ => prec.right(repeat1(
       seq(repeat($._annotation), '[', ']')
     )),
 
     switch_expression: $ => seq(
+      'switch',
+      field('condition', $.parenthesized_expression),
+      field('body', $.switch_block)
+    ),
+
+    switch_statement: $ => seq(
       'switch',
       field('condition', $.parenthesized_expression),
       field('body', $.switch_block)
@@ -428,12 +451,12 @@ module.exports = grammar({
       $.continue_statement,
       $.return_statement,
       $.yield_statement,
-      $.switch_expression, //switch statements and expressions are identical
+      $.switch_statement,
       $.synchronized_statement,
       $.local_variable_declaration,
       $.throw_statement,
       $.try_statement,
-      $.try_with_resources_statement
+      $.try_with_resources_extended_statement
     ),
 
     block: $ => seq(
@@ -513,12 +536,16 @@ module.exports = grammar({
 
     finally_clause: $ => seq('finally', $.block),
 
+    try_with_resources_extended_statement: $ => seq(
+      $.try_with_resources_statement,
+      repeat($.catch_clause),
+      optional($.finally_clause)
+    ),
+
     try_with_resources_statement: $ => seq(
       'try',
       field('resources', $.resource_specification),
       field('body', $.block),
-      repeat($.catch_clause),
-      optional($.finally_clause)
     ),
 
     resource_specification: $ => seq(
@@ -755,10 +782,10 @@ module.exports = grammar({
 
     super_interfaces: $ => seq(
       'implements',
-      $.interface_type_list
+      $._interface_type_list
     ),
 
-    interface_type_list: $ => seq(
+    _interface_type_list: $ => seq(
       $._type,
       repeat(seq(',', $._type))
     ),
@@ -898,7 +925,7 @@ module.exports = grammar({
 
     extends_interfaces: $ => seq(
       'extends',
-      $.interface_type_list
+      $._interface_type_list
     ),
 
     interface_body: $ => seq(

@@ -112,6 +112,32 @@
     ]
   },
   {
+    "type": "_unary_exp",
+    "named": true,
+    "subtypes": [
+      {
+        "type": "cast_expression",
+        "named": true
+      },
+      {
+        "type": "primary_expression",
+        "named": true
+      },
+      {
+        "type": "switch_expression",
+        "named": true
+      },
+      {
+        "type": "unary_expression",
+        "named": true
+      },
+      {
+        "type": "update_expression",
+        "named": true
+      }
+    ]
+  },
+  {
     "type": "declaration",
     "named": true,
     "subtypes": [
@@ -150,15 +176,15 @@
     "named": true,
     "subtypes": [
       {
+        "type": "_unary_exp",
+        "named": true
+      },
+      {
         "type": "assignment_expression",
         "named": true
       },
       {
         "type": "binary_expression",
-        "named": true
-      },
-      {
-        "type": "cast_expression",
         "named": true
       },
       {
@@ -170,23 +196,7 @@
         "named": true
       },
       {
-        "type": "primary_expression",
-        "named": true
-      },
-      {
-        "type": "switch_expression",
-        "named": true
-      },
-      {
         "type": "ternary_expression",
-        "named": true
-      },
-      {
-        "type": "unary_expression",
-        "named": true
-      },
-      {
-        "type": "update_expression",
         "named": true
       }
     ]
@@ -302,7 +312,7 @@
         "named": true
       },
       {
-        "type": "switch_expression",
+        "type": "switch_statement",
         "named": true
       },
       {
@@ -318,7 +328,7 @@
         "named": true
       },
       {
-        "type": "try_with_resources_statement",
+        "type": "try_with_resources_extended_statement",
         "named": true
       },
       {
@@ -1740,11 +1750,11 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": true,
       "types": [
         {
-          "type": "interface_type_list",
+          "type": "_type",
           "named": true
         }
       ]
@@ -2177,21 +2187,6 @@
         },
         {
           "type": "modifiers",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "interface_type_list",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "_type",
           "named": true
         }
       ]
@@ -2981,11 +2976,11 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": true,
       "types": [
         {
-          "type": "interface_type_list",
+          "type": "_type",
           "named": true
         }
       ]
@@ -3113,6 +3108,32 @@
     }
   },
   {
+    "type": "switch_statement",
+    "named": true,
+    "fields": {
+      "body": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "switch_block",
+            "named": true
+          }
+        ]
+      },
+      "condition": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "parenthesized_expression",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "synchronized_statement",
     "named": true,
     "fields": {
@@ -3235,6 +3256,29 @@
     }
   },
   {
+    "type": "try_with_resources_extended_statement",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "catch_clause",
+          "named": true
+        },
+        {
+          "type": "finally_clause",
+          "named": true
+        },
+        {
+          "type": "try_with_resources_statement",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "try_with_resources_statement",
     "named": true,
     "fields": {
@@ -3258,20 +3302,6 @@
           }
         ]
       }
-    },
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "catch_clause",
-          "named": true
-        },
-        {
-          "type": "finally_clause",
-          "named": true
-        }
-      ]
     }
   },
   {
@@ -3397,7 +3427,7 @@
       "required": true,
       "types": [
         {
-          "type": "expression",
+          "type": "_unary_exp",
           "named": true
         }
       ]
@@ -3478,15 +3508,49 @@
       "required": false,
       "types": [
         {
-          "type": "_type",
-          "named": true
-        },
-        {
           "type": "annotation",
           "named": true
         },
         {
           "type": "marker_annotation",
+          "named": true
+        },
+        {
+          "type": "wildcard_extends",
+          "named": true
+        },
+        {
+          "type": "wildcard_super",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "wildcard_extends",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "_type",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "wildcard_super",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "_type",
           "named": true
         },
         {

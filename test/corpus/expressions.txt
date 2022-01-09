@@ -519,7 +519,7 @@ public class SwitchDemo {
             type: (type_identifier)
             declarator: (variable_declarator
               name: (identifier)))
-          (switch_expression
+          (switch_statement
             condition: (parenthesized_expression
               (identifier))
             body: (switch_block
@@ -574,10 +574,10 @@ class Test {
     }
 
     void main() {
-        switch (f(i)) {
-            case 0, 1 -> System.out.println(6);
-            case 2 -> System.out.println(7);
-        }
+        String a = switch (f(i)) {
+            case 0, 1 -> "6";
+            case 2 -> "7";
+        };
     }
 }
 
@@ -606,36 +606,28 @@ class Test {
         name: (identifier)
         parameters: (formal_parameters)
         body: (block
-          (switch_expression
-            condition: (parenthesized_expression
-              (method_invocation
-                name: (identifier)
-                arguments: (argument_list
-                  (identifier))))
-            body: (switch_block
-              (switch_rule
-                (switch_label
-                  (decimal_integer_literal)
-                  (decimal_integer_literal))
-                (expression_statement
+          (local_variable_declaration 
+            type: (type_identifier) 
+            declarator: (variable_declarator 
+              name: (identifier) 
+              value: (switch_expression
+                condition: (parenthesized_expression
                   (method_invocation
-                    object: (field_access
-                      object: (identifier)
-                      field: (identifier))
                     name: (identifier)
                     arguments: (argument_list
-                      (decimal_integer_literal)))))
-              (switch_rule
-                (switch_label
-                  (decimal_integer_literal))
-                (expression_statement
-                  (method_invocation
-                    object: (field_access
-                      object: (identifier)
-                      field: (identifier))
-                    name: (identifier)
-                    arguments: (argument_list
-                      (decimal_integer_literal))))))))))))
+                      (identifier))))
+                body: (switch_block
+                  (switch_rule
+                    (switch_label
+                      (decimal_integer_literal)
+                      (decimal_integer_literal))
+                    (expression_statement
+                      (string_literal)))
+                  (switch_rule
+                    (switch_label
+                      (decimal_integer_literal))
+                    (expression_statement
+                      (string_literal))))))))))))
 
 ===========================================================
 traditional-style switch expression
