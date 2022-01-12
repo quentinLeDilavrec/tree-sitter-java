@@ -98,6 +98,32 @@
     ]
   },
   {
+    "type": "_type_declaration",
+    "named": true,
+    "subtypes": [
+      {
+        "type": ";",
+        "named": false
+      },
+      {
+        "type": "annotation_type_declaration",
+        "named": true
+      },
+      {
+        "type": "class_declaration",
+        "named": true
+      },
+      {
+        "type": "enum_declaration",
+        "named": true
+      },
+      {
+        "type": "interface_declaration",
+        "named": true
+      }
+    ]
+  },
+  {
     "type": "_unannotated_type",
     "named": true,
     "subtypes": [
@@ -133,40 +159,6 @@
       },
       {
         "type": "update_expression",
-        "named": true
-      }
-    ]
-  },
-  {
-    "type": "declaration",
-    "named": true,
-    "subtypes": [
-      {
-        "type": "annotation_type_declaration",
-        "named": true
-      },
-      {
-        "type": "class_declaration",
-        "named": true
-      },
-      {
-        "type": "enum_declaration",
-        "named": true
-      },
-      {
-        "type": "import_declaration",
-        "named": true
-      },
-      {
-        "type": "interface_declaration",
-        "named": true
-      },
-      {
-        "type": "module_declaration",
-        "named": true
-      },
-      {
-        "type": "package_declaration",
         "named": true
       }
     ]
@@ -276,10 +268,6 @@
         "named": true
       },
       {
-        "type": "declaration",
-        "named": true
-      },
-      {
         "type": "do_statement",
         "named": true
       },
@@ -304,11 +292,11 @@
         "named": true
       },
       {
-        "type": "local_variable_declaration",
+        "type": "return_statement",
         "named": true
       },
       {
-        "type": "return_statement",
+        "type": "scope",
         "named": true
       },
       {
@@ -434,7 +422,7 @@
       "required": false,
       "types": [
         {
-          "type": "annotation_type_declaration",
+          "type": "_type_declaration",
           "named": true
         },
         {
@@ -442,19 +430,7 @@
           "named": true
         },
         {
-          "type": "class_declaration",
-          "named": true
-        },
-        {
           "type": "constant_declaration",
-          "named": true
-        },
-        {
-          "type": "enum_declaration",
-          "named": true
-        },
-        {
-          "type": "interface_declaration",
           "named": true
         }
       ]
@@ -1066,7 +1042,7 @@
       "required": false,
       "types": [
         {
-          "type": "annotation_type_declaration",
+          "type": "_type_declaration",
           "named": true
         },
         {
@@ -1074,23 +1050,11 @@
           "named": true
         },
         {
-          "type": "class_declaration",
-          "named": true
-        },
-        {
           "type": "constructor_declaration",
           "named": true
         },
         {
-          "type": "enum_declaration",
-          "named": true
-        },
-        {
           "type": "field_declaration",
-          "named": true
-        },
-        {
-          "type": "interface_declaration",
           "named": true
         },
         {
@@ -1546,7 +1510,7 @@
       "required": false,
       "types": [
         {
-          "type": "annotation_type_declaration",
+          "type": "_type_declaration",
           "named": true
         },
         {
@@ -1554,23 +1518,11 @@
           "named": true
         },
         {
-          "type": "class_declaration",
-          "named": true
-        },
-        {
           "type": "constructor_declaration",
           "named": true
         },
         {
-          "type": "enum_declaration",
-          "named": true
-        },
-        {
           "type": "field_declaration",
-          "named": true
-        },
-        {
-          "type": "interface_declaration",
           "named": true
         },
         {
@@ -2116,23 +2068,11 @@
       "required": false,
       "types": [
         {
-          "type": "annotation_type_declaration",
-          "named": true
-        },
-        {
-          "type": "class_declaration",
+          "type": "_type_declaration",
           "named": true
         },
         {
           "type": "constant_declaration",
-          "named": true
-        },
-        {
-          "type": "enum_declaration",
-          "named": true
-        },
-        {
-          "type": "interface_declaration",
           "named": true
         },
         {
@@ -2690,6 +2630,22 @@
       "required": false,
       "types": [
         {
+          "type": "_type_declaration",
+          "named": true
+        },
+        {
+          "type": "import_declaration",
+          "named": true
+        },
+        {
+          "type": "module_declaration",
+          "named": true
+        },
+        {
+          "type": "package_declaration",
+          "named": true
+        },
+        {
           "type": "statement",
           "named": true
         }
@@ -2867,6 +2823,36 @@
       "types": [
         {
           "type": "expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "scope",
+    "named": true,
+    "fields": {
+      "declaration": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "_type_declaration",
+            "named": true
+          },
+          {
+            "type": "local_variable_declaration",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "statement",
           "named": true
         }
       ]

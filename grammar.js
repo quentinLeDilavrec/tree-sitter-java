@@ -40,7 +40,7 @@ module.exports = grammar({
   supertypes: $ => [
     $.expression,
     $._unary_exp,
-    $.declaration,
+    $._type_declaration,
     $.statement,
     $.primary_expression,
     $._literal,
@@ -56,11 +56,16 @@ module.exports = grammar({
     $._reserved_identifier,
     $._class_body_declaration,
     $._variable_initializer,
-    $._interface_type_list
+    $._interface_type_list,
+    $._declaring_statement,
   ],
 
   conflicts: $ => [
     [$.modifiers, $.annotated_type, $.receiver_parameter],
+    [$.modifiers, $.annotated_type],
+    [$.modifiers, $.package_declaration],
+    [$.modifiers, $.annotated_type, $.package_declaration],
+    [$.modifiers, $.module_declaration],
     [$.modifiers, $.annotated_type, $.module_declaration, $.package_declaration],
     [$._unannotated_type, $.primary_expression, $.inferred_parameters],
     [$._unannotated_type, $.primary_expression],
@@ -72,12 +77,27 @@ module.exports = grammar({
     [$.lambda_expression, $.primary_expression],
 
     [$.switch_expression, $.switch_statement],
+
+    [$.program, $.scope],
   ],
 
   word: $ => $.identifier,
 
   rules: {
-    program: $ => repeat($.statement),
+    program: $ => prec(PREC.DECL, choice(
+      repeat($.statement),
+      // ordinary compilation unit
+      seq(
+        optional($.package_declaration),
+        repeat($.import_declaration),
+        repeat($._type_declaration),
+      ),
+      // modular compilation unit
+      seq(
+        repeat($.import_declaration),
+        $.module_declaration,
+      )
+    )),
 
     // Literals
 
@@ -436,7 +456,9 @@ module.exports = grammar({
     // Statements
 
     statement: $ => choice(
-      $.declaration,
+      $.scope,
+      // $.declaration,
+      // $.local_variable_declaration,
       $.expression_statement,
       $.labeled_statement,
       $.if_statement,
@@ -453,10 +475,19 @@ module.exports = grammar({
       $.yield_statement,
       $.switch_statement,
       $.synchronized_statement,
-      $.local_variable_declaration,
       $.throw_statement,
       $.try_statement,
       $.try_with_resources_extended_statement
+    ),
+
+    scope: $ => prec.right(seq(
+      field('declaration', $._declaring_statement),
+      repeat($.statement),
+    )),
+
+    _declaring_statement: $ => choice(
+      $._type_declaration,
+      $.local_variable_declaration,
     ),
 
     block: $ => seq(
@@ -651,14 +682,22 @@ module.exports = grammar({
 
     // Declarations
 
-    declaration: $ => prec(PREC.DECL, choice(
-      $.module_declaration,
-      $.package_declaration,
-      $.import_declaration,
+    // declaration: $ => prec(PREC.DECL, choice(
+    //   $.module_declaration,
+    //   $.package_declaration,
+    //   $.import_declaration,
+    //   $.class_declaration,
+    //   $.interface_declaration,
+    //   $.annotation_type_declaration,
+    //   $.enum_declaration,
+    // )),
+
+    _type_declaration: $ => prec(PREC.DECL, choice(
       $.class_declaration,
       $.interface_declaration,
       $.annotation_type_declaration,
       $.enum_declaration,
+      ';',
     )),
 
     module_declaration: $ => seq(
@@ -688,12 +727,12 @@ module.exports = grammar({
       'static'
     ),
 
-    package_declaration: $ => seq(
+    package_declaration: $ => prec(PREC.DECL, seq(
       repeat($._annotation),
       'package',
       $._name,
       ';'
-    ),
+    )),
 
     import_declaration: $ => seq(
       'import',
@@ -800,10 +839,7 @@ module.exports = grammar({
       $.field_declaration,
       $.record_declaration,
       $.method_declaration,
-      $.class_declaration,
-      $.interface_declaration,
-      $.annotation_type_declaration,
-      $.enum_declaration,
+      $._type_declaration,
       $.block,
       $.static_initializer,
       $.constructor_declaration,
@@ -890,10 +926,7 @@ module.exports = grammar({
       '{', repeat(choice(
         $.annotation_type_element_declaration,
         $.constant_declaration,
-        $.class_declaration,
-        $.interface_declaration,
-        $.enum_declaration,
-        $.annotation_type_declaration,
+        $._type_declaration,
         ';'
       )),
       '}'
@@ -932,11 +965,8 @@ module.exports = grammar({
       '{',
       repeat(choice(
         $.constant_declaration,
-        $.enum_declaration,
         $.method_declaration,
-        $.class_declaration,
-        $.interface_declaration,
-        $.annotation_type_declaration,
+        $._type_declaration,
         ';'
       )),
       '}'

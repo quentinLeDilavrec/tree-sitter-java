@@ -3,10 +3,66 @@
   "word": "identifier",
   "rules": {
     "program": {
-      "type": "REPEAT",
+      "type": "PREC",
+      "value": 2,
       "content": {
-        "type": "SYMBOL",
-        "name": "statement"
+        "type": "CHOICE",
+        "members": [
+          {
+            "type": "REPEAT",
+            "content": {
+              "type": "SYMBOL",
+              "name": "statement"
+            }
+          },
+          {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "SYMBOL",
+                    "name": "package_declaration"
+                  },
+                  {
+                    "type": "BLANK"
+                  }
+                ]
+              },
+              {
+                "type": "REPEAT",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "import_declaration"
+                }
+              },
+              {
+                "type": "REPEAT",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "_type_declaration"
+                }
+              }
+            ]
+          },
+          {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "REPEAT",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "import_declaration"
+                }
+              },
+              {
+                "type": "SYMBOL",
+                "name": "module_declaration"
+              }
+            ]
+          }
+        ]
       }
     },
     "_literal": {
@@ -3221,7 +3277,7 @@
       "members": [
         {
           "type": "SYMBOL",
-          "name": "declaration"
+          "name": "scope"
         },
         {
           "type": "SYMBOL",
@@ -3289,10 +3345,6 @@
         },
         {
           "type": "SYMBOL",
-          "name": "local_variable_declaration"
-        },
-        {
-          "type": "SYMBOL",
           "name": "throw_statement"
         },
         {
@@ -3302,6 +3354,43 @@
         {
           "type": "SYMBOL",
           "name": "try_with_resources_extended_statement"
+        }
+      ]
+    },
+    "scope": {
+      "type": "PREC_RIGHT",
+      "value": 0,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "FIELD",
+            "name": "declaration",
+            "content": {
+              "type": "SYMBOL",
+              "name": "_declaring_statement"
+            }
+          },
+          {
+            "type": "REPEAT",
+            "content": {
+              "type": "SYMBOL",
+              "name": "statement"
+            }
+          }
+        ]
+      }
+    },
+    "_declaring_statement": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "_type_declaration"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "local_variable_declaration"
         }
       ]
     },
@@ -4362,24 +4451,12 @@
         }
       ]
     },
-    "declaration": {
+    "_type_declaration": {
       "type": "PREC",
       "value": 2,
       "content": {
         "type": "CHOICE",
         "members": [
-          {
-            "type": "SYMBOL",
-            "name": "module_declaration"
-          },
-          {
-            "type": "SYMBOL",
-            "name": "package_declaration"
-          },
-          {
-            "type": "SYMBOL",
-            "name": "import_declaration"
-          },
           {
             "type": "SYMBOL",
             "name": "class_declaration"
@@ -4395,6 +4472,10 @@
           {
             "type": "SYMBOL",
             "name": "enum_declaration"
+          },
+          {
+            "type": "STRING",
+            "value": ";"
           }
         ]
       }
@@ -4667,28 +4748,32 @@
       ]
     },
     "package_declaration": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "REPEAT",
-          "content": {
+      "type": "PREC",
+      "value": 2,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "REPEAT",
+            "content": {
+              "type": "SYMBOL",
+              "name": "_annotation"
+            }
+          },
+          {
+            "type": "STRING",
+            "value": "package"
+          },
+          {
             "type": "SYMBOL",
-            "name": "_annotation"
+            "name": "_name"
+          },
+          {
+            "type": "STRING",
+            "value": ";"
           }
-        },
-        {
-          "type": "STRING",
-          "value": "package"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "_name"
-        },
-        {
-          "type": "STRING",
-          "value": ";"
-        }
-      ]
+        ]
+      }
     },
     "import_declaration": {
       "type": "SEQ",
@@ -5276,19 +5361,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "class_declaration"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "interface_declaration"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "annotation_type_declaration"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "enum_declaration"
+          "name": "_type_declaration"
         },
         {
           "type": "SYMBOL",
@@ -5716,19 +5789,7 @@
               },
               {
                 "type": "SYMBOL",
-                "name": "class_declaration"
-              },
-              {
-                "type": "SYMBOL",
-                "name": "interface_declaration"
-              },
-              {
-                "type": "SYMBOL",
-                "name": "enum_declaration"
-              },
-              {
-                "type": "SYMBOL",
-                "name": "annotation_type_declaration"
+                "name": "_type_declaration"
               },
               {
                 "type": "STRING",
@@ -5929,23 +5990,11 @@
               },
               {
                 "type": "SYMBOL",
-                "name": "enum_declaration"
-              },
-              {
-                "type": "SYMBOL",
                 "name": "method_declaration"
               },
               {
                 "type": "SYMBOL",
-                "name": "class_declaration"
-              },
-              {
-                "type": "SYMBOL",
-                "name": "interface_declaration"
-              },
-              {
-                "type": "SYMBOL",
-                "name": "annotation_type_declaration"
+                "name": "_type_declaration"
               },
               {
                 "type": "STRING",
@@ -6868,6 +6917,23 @@
     ],
     [
       "modifiers",
+      "annotated_type"
+    ],
+    [
+      "modifiers",
+      "package_declaration"
+    ],
+    [
+      "modifiers",
+      "annotated_type",
+      "package_declaration"
+    ],
+    [
+      "modifiers",
+      "module_declaration"
+    ],
+    [
+      "modifiers",
       "annotated_type",
       "module_declaration",
       "package_declaration"
@@ -6905,6 +6971,10 @@
     [
       "switch_expression",
       "switch_statement"
+    ],
+    [
+      "program",
+      "scope"
     ]
   ],
   "precedences": [],
@@ -6916,12 +6986,13 @@
     "_reserved_identifier",
     "_class_body_declaration",
     "_variable_initializer",
-    "_interface_type_list"
+    "_interface_type_list",
+    "_declaring_statement"
   ],
   "supertypes": [
     "expression",
     "_unary_exp",
-    "declaration",
+    "_type_declaration",
     "statement",
     "primary_expression",
     "_literal",
