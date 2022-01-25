@@ -3277,7 +3277,7 @@
       "members": [
         {
           "type": "SYMBOL",
-          "name": "scope"
+          "name": "_declaring_statement"
         },
         {
           "type": "SYMBOL",
@@ -3356,30 +3356,6 @@
           "name": "try_with_resources_extended_statement"
         }
       ]
-    },
-    "scope": {
-      "type": "PREC_RIGHT",
-      "value": 0,
-      "content": {
-        "type": "SEQ",
-        "members": [
-          {
-            "type": "FIELD",
-            "name": "declaration",
-            "content": {
-              "type": "SYMBOL",
-              "name": "_declaring_statement"
-            }
-          },
-          {
-            "type": "REPEAT",
-            "content": {
-              "type": "SYMBOL",
-              "name": "statement"
-            }
-          }
-        ]
-      }
     },
     "_declaring_statement": {
       "type": "CHOICE",
@@ -6974,7 +6950,7 @@
     ],
     [
       "program",
-      "scope"
+      "statement"
     ]
   ],
   "precedences": [],

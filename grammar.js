@@ -78,7 +78,7 @@ module.exports = grammar({
 
     [$.switch_expression, $.switch_statement],
 
-    [$.program, $.scope],
+    [$.program, $.statement],
   ],
 
   word: $ => $.identifier,
@@ -437,7 +437,7 @@ module.exports = grammar({
       '}'
     ),
 
-    switch_block_statement_group: $ => prec.left (seq(
+    switch_block_statement_group: $ => prec.left(seq(
         repeat1(seq($.switch_label, ':')),
         repeat($.statement),
     )),
@@ -446,19 +446,17 @@ module.exports = grammar({
       $.switch_label,
       '->',
       choice($.expression_statement, $.throw_statement, $.block)
-     ),
+    ),
 
     switch_label: $ => choice(
       seq('case', commaSep1($.expression)),
       'default'
     ),
-
+    
     // Statements
 
     statement: $ => choice(
-      $.scope,
-      // $.declaration,
-      // $.local_variable_declaration,
+      $._declaring_statement,
       $.expression_statement,
       $.labeled_statement,
       $.if_statement,
@@ -479,11 +477,6 @@ module.exports = grammar({
       $.try_statement,
       $.try_with_resources_extended_statement
     ),
-
-    scope: $ => prec.right(seq(
-      field('declaration', $._declaring_statement),
-      repeat($.statement),
-    )),
 
     _declaring_statement: $ => choice(
       $._type_declaration,
