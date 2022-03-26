@@ -51,6 +51,7 @@ module.exports = grammar({
 
   inline: $ => [
     $._unary_exp,
+    $._absolute_name,
     $._name,
     $._simple_type,
     $._reserved_identifier,
@@ -73,6 +74,8 @@ module.exports = grammar({
     [$._unannotated_type, $.scoped_type_identifier],
     [$._unannotated_type, $.generic_type],
     [$.generic_type, $.primary_expression],
+    // [$.type_identifier, $.primary_expression],
+    // [$.type_identifier, $.primary_expression, $.inferred_parameters],
     // Only conflicts in switch expressions
     [$.lambda_expression, $.primary_expression],
 
@@ -697,7 +700,7 @@ module.exports = grammar({
       repeat($._annotation),
       optional('open'),
       'module',
-      field('name', $._name),
+      field('name', $._absolute_name),
       field('body', $.module_body)
     ),
 
@@ -723,14 +726,14 @@ module.exports = grammar({
     package_declaration: $ => prec(PREC.DECL, seq(
       repeat($._annotation),
       'package',
-      $._name,
+      $._absolute_name,
       ';'
     )),
 
     import_declaration: $ => seq(
       'import',
       optional('static'),
-      $._name,
+      $._absolute_name,
       optional(seq('.', $.asterisk)),
       ';'
     ),
@@ -893,6 +896,18 @@ module.exports = grammar({
       field('name', $.identifier)
     ),
 
+    _absolute_name: $ => choice(
+      $.identifier,
+      $._reserved_identifier,
+      $.scoped_absolute_identifier
+    ),
+
+    scoped_absolute_identifier: $ => seq(
+      field('scope', $._absolute_name),
+      '.',
+      field('name', $.identifier)
+    ),
+
     field_declaration: $ => seq(
       optional($.modifiers),
       field('type', $._unannotated_type),
@@ -1015,7 +1030,7 @@ module.exports = grammar({
       $.integral_type,
       $.floating_point_type,
       $.boolean_type,
-      alias($.identifier, $.type_identifier),
+      alias($.identifier, $.type_identifier),//$.type_identifier,
       $.scoped_type_identifier,
       $.generic_type
     ),
@@ -1027,18 +1042,18 @@ module.exports = grammar({
 
     scoped_type_identifier: $ => seq(
       choice(
-        alias($.identifier, $.type_identifier),
+        alias($.identifier, $.type_identifier),//$.type_identifier,
         $.scoped_type_identifier,
         $.generic_type
       ),
       '.',
       repeat($._annotation),
-      alias($.identifier, $.type_identifier)
+      alias($.identifier, $.type_identifier),//$.type_identifier
     ),
 
     generic_type: $ => prec.dynamic(PREC.GENERIC, seq(
       choice(
-        alias($.identifier, $.type_identifier),
+        alias($.identifier, $.type_identifier),//$.type_identifier,
         $.scoped_type_identifier
       ),
       $.type_arguments
@@ -1137,6 +1152,7 @@ module.exports = grammar({
 
     // https://docs.oracle.com/javase/specs/jls/se8/html/jls-3.html#jls-IdentifierChars
     identifier: $ => /[\p{L}_$][\p{L}\p{Nd}_$]*/,
+    //type_identifier: $ => $.identifier,
 
     // http://stackoverflow.com/questions/13014947/regex-to-match-a-c-style-multiline-comment/36328890#36328890
     comment: $ => token(prec(PREC.COMMENT, choice(

@@ -4487,7 +4487,7 @@
           "name": "name",
           "content": {
             "type": "SYMBOL",
-            "name": "_name"
+            "name": "_absolute_name"
           }
         },
         {
@@ -4742,7 +4742,7 @@
           },
           {
             "type": "SYMBOL",
-            "name": "_name"
+            "name": "_absolute_name"
           },
           {
             "type": "STRING",
@@ -4772,7 +4772,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "_name"
+          "name": "_absolute_name"
         },
         {
           "type": "CHOICE",
@@ -5612,6 +5612,48 @@
           "content": {
             "type": "SYMBOL",
             "name": "_name"
+          }
+        },
+        {
+          "type": "STRING",
+          "value": "."
+        },
+        {
+          "type": "FIELD",
+          "name": "name",
+          "content": {
+            "type": "SYMBOL",
+            "name": "identifier"
+          }
+        }
+      ]
+    },
+    "_absolute_name": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "identifier"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_reserved_identifier"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "scoped_absolute_identifier"
+        }
+      ]
+    },
+    "scoped_absolute_identifier": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "FIELD",
+          "name": "scope",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_absolute_name"
           }
         },
         {
@@ -6957,6 +6999,7 @@
   "externals": [],
   "inline": [
     "_unary_exp",
+    "_absolute_name",
     "_name",
     "_simple_type",
     "_reserved_identifier",

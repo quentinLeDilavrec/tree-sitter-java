@@ -2011,7 +2011,7 @@
           "named": true
         },
         {
-          "type": "scoped_identifier",
+          "type": "scoped_absolute_identifier",
           "named": true
         }
       ]
@@ -2481,7 +2481,7 @@
             "named": true
           },
           {
-            "type": "scoped_identifier",
+            "type": "scoped_absolute_identifier",
             "named": true
           }
         ]
@@ -2604,7 +2604,7 @@
           "named": true
         },
         {
-          "type": "scoped_identifier",
+          "type": "scoped_absolute_identifier",
           "named": true
         }
       ]
@@ -2826,6 +2826,36 @@
           "named": true
         }
       ]
+    }
+  },
+  {
+    "type": "scoped_absolute_identifier",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "scope": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "scoped_absolute_identifier",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
