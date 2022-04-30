@@ -2887,8 +2887,12 @@
           "type": "CHOICE",
           "members": [
             {
-              "type": "SYMBOL",
-              "name": "_type"
+              "type": "PREC_DYNAMIC",
+              "value": 20,
+              "content": {
+                "type": "SYMBOL",
+                "name": "_type"
+              }
             },
             {
               "type": "SYMBOL",
@@ -4164,28 +4168,8 @@
           "value": "("
         },
         {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "SYMBOL",
-              "name": "modifiers"
-            },
-            {
-              "type": "BLANK"
-            }
-          ]
-        },
-        {
-          "type": "FIELD",
-          "name": "type",
-          "content": {
-            "type": "SYMBOL",
-            "name": "_unannotated_type"
-          }
-        },
-        {
           "type": "SYMBOL",
-          "name": "_variable_declarator_id"
+          "name": "enhanced_for_variable"
         },
         {
           "type": "STRING",
@@ -4210,6 +4194,35 @@
             "type": "SYMBOL",
             "name": "statement"
           }
+        }
+      ]
+    },
+    "enhanced_for_variable": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "modifiers"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "FIELD",
+          "name": "type",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_unannotated_type"
+          }
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_variable_declarator_id"
         }
       ]
     },

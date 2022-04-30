@@ -387,7 +387,7 @@ module.exports = grammar({
     argument_list: $ => seq('(', commaSep($.expression), ')'),
 
     method_reference: $ => seq(
-      choice($._type, $.primary_expression, $.super),
+      choice(prec.dynamic(20,$._type), $.primary_expression, $.super), // TODO check if prec is useful, make a regression test
       '::',
       optional($.type_arguments),
       choice('new', $.identifier)
@@ -621,13 +621,17 @@ module.exports = grammar({
     enhanced_for_statement: $ => seq(
       'for',
       '(',
-      optional($.modifiers),
-      field('type', $._unannotated_type),
-      $._variable_declarator_id,
+      $.enhanced_for_variable,
       ':',
       field('value', $.expression),
       ')',
       field('body', $.statement)
+    ),
+
+    enhanced_for_variable: $ => seq(
+      optional($.modifiers),
+      field('type', $._unannotated_type),
+      $._variable_declarator_id
     ),
 
     // Annotations
