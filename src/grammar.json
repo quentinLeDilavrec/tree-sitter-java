@@ -3465,34 +3465,42 @@
         }
       ]
     },
+    "wildcard_extends": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "extends"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_type"
+        }
+      ]
+    },
+    "wildcard_super": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "super"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_type"
+        }
+      ]
+    },
     "_wildcard_bounds": {
       "type": "CHOICE",
       "members": [
         {
-          "type": "SEQ",
-          "members": [
-            {
-              "type": "STRING",
-              "value": "extends"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "_type"
-            }
-          ]
+          "type": "SYMBOL",
+          "name": "wildcard_extends"
         },
         {
-          "type": "SEQ",
-          "members": [
-            {
-              "type": "SYMBOL",
-              "name": "super"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "_type"
-            }
-          ]
+          "type": "SYMBOL",
+          "name": "wildcard_super"
         }
       ]
     },
@@ -4753,28 +4761,8 @@
           "value": "("
         },
         {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "SYMBOL",
-              "name": "modifiers"
-            },
-            {
-              "type": "BLANK"
-            }
-          ]
-        },
-        {
-          "type": "FIELD",
-          "name": "type",
-          "content": {
-            "type": "SYMBOL",
-            "name": "_unannotated_type"
-          }
-        },
-        {
           "type": "SYMBOL",
-          "name": "_variable_declarator_id"
+          "name": "_enhanced_for_variable"
         },
         {
           "type": "STRING",
@@ -4799,6 +4787,35 @@
             "type": "SYMBOL",
             "name": "statement"
           }
+        }
+      ]
+    },
+    "_enhanced_for_variable": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "modifiers"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "FIELD",
+          "name": "type",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_unannotated_type"
+          }
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_variable_declarator_id"
         }
       ]
     },
@@ -5088,7 +5105,7 @@
           "name": "name",
           "content": {
             "type": "SYMBOL",
-            "name": "_name"
+            "name": "_absolute_name"
           }
         },
         {
@@ -5409,7 +5426,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "_name"
+          "name": "_absolute_name"
         },
         {
           "type": "STRING",
@@ -5438,7 +5455,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "_name"
+          "name": "_absolute_name"
         },
         {
           "type": "CHOICE",
@@ -6328,6 +6345,48 @@
           "content": {
             "type": "SYMBOL",
             "name": "_name"
+          }
+        },
+        {
+          "type": "STRING",
+          "value": "."
+        },
+        {
+          "type": "FIELD",
+          "name": "name",
+          "content": {
+            "type": "SYMBOL",
+            "name": "identifier"
+          }
+        }
+      ]
+    },
+    "_absolute_name": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "identifier"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_reserved_identifier"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "scoped_absolute_identifier"
+        }
+      ]
+    },
+    "scoped_absolute_identifier": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "FIELD",
+          "name": "scope",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_absolute_name"
           }
         },
         {

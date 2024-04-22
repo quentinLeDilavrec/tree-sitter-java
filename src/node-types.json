@@ -2208,7 +2208,7 @@
           "named": true
         },
         {
-          "type": "scoped_identifier",
+          "type": "scoped_absolute_identifier",
           "named": true
         }
       ]
@@ -2724,7 +2724,7 @@
             "named": true
           },
           {
-            "type": "scoped_identifier",
+            "type": "scoped_absolute_identifier",
             "named": true
           }
         ]
@@ -2863,7 +2863,7 @@
           "named": true
         },
         {
-          "type": "scoped_identifier",
+          "type": "scoped_absolute_identifier",
           "named": true
         }
       ]
@@ -3278,6 +3278,36 @@
           "named": true
         }
       ]
+    }
+  },
+  {
+    "type": "scoped_absolute_identifier",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "scope": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "scoped_absolute_identifier",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -4015,15 +4045,49 @@
       "required": false,
       "types": [
         {
-          "type": "_type",
-          "named": true
-        },
-        {
           "type": "annotation",
           "named": true
         },
         {
           "type": "marker_annotation",
+          "named": true
+        },
+        {
+          "type": "wildcard_extends",
+          "named": true
+        },
+        {
+          "type": "wildcard_super",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "wildcard_extends",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "_type",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "wildcard_super",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "_type",
           "named": true
         },
         {
